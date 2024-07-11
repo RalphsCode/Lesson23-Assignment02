@@ -16,5 +16,6 @@ with app.app_context():
 
 @app.route('/')
 def home():
-    return render_template('home.html')
+    cupcakes = Cupcake.query.all()
+    return render_template('home.html', cupcakes=cupcakes)
  

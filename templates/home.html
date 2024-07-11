@@ -7,5 +7,9 @@ Ralph's Cupcake
 {% block content %}
 
 <h1 class="text-white">Ralph's Cupcake App</h1>
-
+{% for cupcake in cupcakes %}
+<p>Name: {{cupcake.flavor.capitalize()}}<br>
+<img src="{{cupcake.image}}" alt="Yummy" width="150">
+<br></p>
+{% endfor %}
 {% endblock %}
