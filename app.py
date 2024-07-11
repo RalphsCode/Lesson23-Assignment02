@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify 
+from flask import Flask, render_template, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from models import db, connect_db, Cupcake
 # Need Flask to start a server
@@ -26,12 +26,25 @@ def home():
     cupcakes = Cupcake.query.all()
     return render_template('home.html', cupcakes=cupcakes)
  
-@app.route('/api/cupcakes')
+@app.route('/api/cupcakes', methods=["GET", "POST"])
 def all_cupcakes():
-    cupcakes = Cupcake.query.all()
-    serialized = [serialize(cupcake) for cupcake in cupcakes]
+    if request.method != "POST":
+        cupcakes = Cupcake.query.all()
+        serialized = [serialize(cupcake) for cupcake in cupcakes]
+        return (jsonify(cupcakes=serialized), 200)
+    else:
+        flavor = request.json["flavor"]
+        size = request.json["size"]
+        rating = request.json["rating"]
+        image = request.json["image"]
 
-    return (jsonify(cupcakes=serialized), 200)
+        new_cupcake = Cupcake(flavor=flavor, size=size, rating=rating, image=image)
+
+        db.session.add(new_cupcake)
+        db.session.commit()
+
+        serialized = serialize(new_cupcake)
+        return (jsonify(cupcake=serialized), 201)
 
 @app.route('/api/cupcakes/<int:id>')
 def view_cupcake(id):
