@@ -35,7 +35,7 @@ def all_cupcakes():
     else:
         flavor = request.json["flavor"]
         size = request.json["size"]
-        rating = request.json["rating"]
+        rating = float(request.json["rating"])
         image = request.json["image"]
 
         new_cupcake = Cupcake(flavor=flavor, size=size, rating=rating, image=image)
@@ -46,8 +46,21 @@ def all_cupcakes():
         serialized = serialize(new_cupcake)
         return (jsonify(cupcake=serialized), 201)
 
-@app.route('/api/cupcakes/<int:id>')
+@app.route('/api/cupcakes/<int:id>', methods=(["GET","PATCH", "DELETE"]))
 def view_cupcake(id):
     cupcake = Cupcake.query.get_or_404(id)
-    serialized = [serialize(cupcake)]
-    return (jsonify(cupcake=serialized), 200)
+    if request.method == "GET":
+        serialized = [serialize(cupcake)]
+        return (jsonify(cupcake=serialized), 200)
+    elif request.method == "PATCH":
+        cupcake.flavor = request.json["flavor"]
+        cupcake.size = request.json["size"]
+        cupcake.rating = float(request.json["rating"])
+        cupcake.image = request.json["image"]
+        db.session.commit()
+        serialized = [serialize(cupcake)]
+        return (jsonify(cupcake=serialized), 200)
+    else:
+        Cupcake.query.filter_by(id = id).delete() 
+        db.session.commit()
+        return ({"message":"deleted"}, 200)
