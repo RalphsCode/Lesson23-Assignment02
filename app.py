@@ -1,6 +1,7 @@
 from flask import Flask, render_template, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from models import db, connect_db, Cupcake
+from forms import AddCupcake
 # Need Flask to start a server
 # Need SQLAlchemy for the Models
 
@@ -8,6 +9,7 @@ from models import db, connect_db, Cupcake
 app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:Ponderosa@localhost/cupcakes'
+app.config['SECRET_KEY'] = "RalphsCode123"
 
 with app.app_context():
     connect_db(app)
@@ -17,6 +19,7 @@ def serialize(cupcake):
     return {
         "id": cupcake.id,
         "flavor": cupcake.flavor,
+        "size": cupcake.size,
         "rating": cupcake.rating,
         "image": cupcake.image
     }
@@ -24,7 +27,8 @@ def serialize(cupcake):
 @app.route('/')
 def home():
     cupcakes = Cupcake.query.all()
-    return render_template('home.html', cupcakes=cupcakes)
+    form = AddCupcake()
+    return render_template('home.html', cupcakes=cupcakes, form=form)
  
 @app.route('/api/cupcakes', methods=["GET", "POST"])
 def all_cupcakes():
