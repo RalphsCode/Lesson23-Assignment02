@@ -6,12 +6,8 @@ Ralph's Cupcake Page
 
 {% block content %}
 
-<h1 class="text-white">Ralph's Cupcake App</h1>
-<h3>API Routes:</h3>
-<p><a href="/api/cupcakes"><span class = "btn btn-success">/api/cupcakes></span></a> Get data about all cupcakes (JSON format)</p>
-<p><a href="/api/cupcakes/1"><span class = "btn btn-success">/api/cupcakes/id</id>></span></a> Get data about particular cupcake (JSON format)</p>
-
-<table table table-bordered>
+<h1>Welcome to Ralph's Cupcake Page</h1><br>
+<table class="table">
     <thead>
       <tr>
         <th>Flavor</th>
@@ -20,25 +16,26 @@ Ralph's Cupcake Page
         <th>Image</th>
       </tr>
     </thead>
-    <tbody id="body">
+    <tbody border: 1px solid black; id="body">
  
     </tbody>
   </table>
 
-    <h2>Add a Cupcake</h2>
+  <!-- Form to Add a Cupcake -->
+    <h2 class="text-white">Add a Cupcake</h2>
     <div class="form-control">
 
-  <form action="/" methods="post">
+  <form action="/" methods="post"  id="form_new_cupcake">
     {{ form.hidden_tag() }}
     {% for field in form 
       if field.widget.input_type != 'hidden' %} 
     <p>
-      {{field.label}}
-      {{field}}
+      {{field.label}}<br>
+      {{field(class="form-control")}}
       </p>
       {% endfor %}
     </p>
-    <button type="submit" class="btn btn-success">Add Cupcake</button>
+    <button type="button" class="btn btn-success" id="btn_new_cupcake">Add Cupcake</button>
   </form>
   </div>
 
