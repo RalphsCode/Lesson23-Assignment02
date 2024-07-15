@@ -34,14 +34,18 @@ def home():
 def all_cupcakes():
     if request.method != "POST":
         cupcakes = Cupcake.query.all()
-        serialized = [serialize(cupcake) for cupcake in cupcakes]
-        return (jsonify(cupcakes=serialized), 200)
+        if cupcakes != []:
+            serialized = [serialize(cupcake) for cupcake in cupcakes]
+            return (jsonify(cupcakes=serialized), 200)
+        else:
+            return (jsonify({'error': 'Sorry; No Cupcakes found'}), 404)
+
     else:
         flavor = request.json["flavor"]
         size = request.json["size"]
         rating = float(request.json["rating"])
+        request.json["image"] 
         image = request.json["image"]
-
         new_cupcake = Cupcake(flavor=flavor, size=size, rating=rating, image=image)
 
         db.session.add(new_cupcake)

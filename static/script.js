@@ -4,7 +4,7 @@ console.log('JS is running')
 window.onload = async function getCupcakeInfo() {
     let response = await axios.get("/api/cupcakes");
     console.log("got:", response.data);
-    console.log("flavor in function", response.data.cupcakes[0].flavor);
+    
     let cupcake_data = response.data;
     
     body_tag = document.getElementById('body')

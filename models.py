@@ -23,3 +23,4 @@ class Cupcake(db.Model):
 
     image = db.Column(db.String(255), nullable=False, default= "https://tinyurl.com/demo-cupcake")
 
+
